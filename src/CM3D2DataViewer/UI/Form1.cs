@@ -176,6 +176,8 @@ namespace CM3D2DataViewer
             var control = new CM3D2MenuControl() { Data= data, Tag= data };
 
             AddTab(Path.GetFileName(file), control);
+
+            control.OpenItem += Control_OpenItem;
         }
 
         private void LoadTex(string file)
