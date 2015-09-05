@@ -35,6 +35,9 @@ namespace CM3D2DataViewer
                 w.Write(data.Version);
                 Write(w, WriteString, data.Descriptions);
                 WriteParamList(w, data.Params);
+                WriteString(w, "end");
+                w.Flush();
+                s.SetLength(s.Position);
             }
         }
     }

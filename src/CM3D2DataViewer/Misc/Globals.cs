@@ -9,7 +9,10 @@ namespace CM3D2DataViewer
     {
         public static void Message(string s)
         {
-            Form1.Instance.MessageTextBox.AppendText(s+Environment.NewLine);
+            var tb  = Form1.Instance.MessageTextBox;
+            
+            tb.AppendText(s+Environment.NewLine);
+            tb.Select(tb.TextLength, 0);
         }
 
         public static void Message(string fmt, params object[] args)

@@ -15,6 +15,16 @@ namespace CM3D2DataViewer
             using(var s= File.OpenWrite(file))
             using(var w= new BinaryWriter(s))
             {
+                System.Diagnostics.Debug.Assert(data.NumBones         == data.Bones.Count);
+                System.Diagnostics.Debug.Assert(data.NumMaterials     == data.Materials.Count);
+                System.Diagnostics.Debug.Assert(data.Mesh.NumPrims    == data.Mesh.Primitives.Count);
+                System.Diagnostics.Debug.Assert(data.Mesh.NumRefBones == data.Mesh.RefBones.Count);
+                System.Diagnostics.Debug.Assert(data.Mesh.NumTangents == 0);
+                System.Diagnostics.Debug.Assert(data.Mesh.NumVerts    == data.Mesh.Vertices.Count);
+
+                foreach(var i in data.Mesh.Primitives)
+                    System.Diagnostics.Debug.Assert(i.NumIndices == i.Indices.Count);
+
                 WriteString(w, data.Magic);
                 w.Write(data.Version);
                 Write(w, WriteString, data.Descriptions);
@@ -46,8 +56,9 @@ namespace CM3D2DataViewer
             Write(w, WriteString, data.RefBones.Select(i => i.Name));
             Write(w, (v) => Write(w, w.Write, v), data.RefBones.Select(i => i.Matrix));
             Write(w, WriteVertex, data.Vertices);
+            w.Write(data.NumTangents);
+            Write(w, WriteVector4, data.Tangents);
             Write(w, WriteSkin,   data.Skins);
-            w.Write(data.Unknown2);
 
             foreach(var i in data.Primitives)
             {
@@ -70,7 +81,6 @@ namespace CM3D2DataViewer
 
         private static void WriteSkin(BinaryWriter w, ModelSkin data)
         {
-            w.Write(data.U);
             w.Write(data.B1);
             w.Write(data.B2);
             w.Write(data.B3);
@@ -78,6 +88,7 @@ namespace CM3D2DataViewer
             w.Write(data.W1);
             w.Write(data.W2);
             w.Write(data.W3);
+            w.Write(data.W4);
         }
 
         private static void WriteMaterial(BinaryWriter w, ModelMaterial data)

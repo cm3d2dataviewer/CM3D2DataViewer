@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -25,6 +26,7 @@ namespace CM3D2DataViewer
         public float                    G                       { get; set; }
         public float                    B                       { get; set; }
         public float                    A                       { get; set; }
+        public string                   TexFileName             { get { return Path.ChangeExtension(Path.GetFileName(TexAsset), ".tex"); } }
 
         public ParamTex() { Type= "tex"; }
     }
@@ -62,6 +64,17 @@ namespace CM3D2DataViewer
 
         public MorphVertex()
         {
+        }
+
+        public MorphVertex(int index, float px, float py, float pz, float nx, float ny, float nz)
+        {
+            Index   = (ushort)index;
+            X       = px;
+            Y       = py;
+            Z       = pz;
+            NX      = nx;
+            NY      = ny;
+            NZ      = nz;
         }
 
         public MorphVertex(int index, Vector3 p, Vector3 n)

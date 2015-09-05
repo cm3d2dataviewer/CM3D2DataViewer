@@ -6,13 +6,14 @@ using System.Text;
 
 namespace CM3D2DataViewer
 {
-    public class CloneSet : FileComposition<MenuFile>
+    public class RelationTree : FileComposition<MenuFile>
     {
         public MenuFile                 RootMenuFile            { get { return TypedFile; } }
         public List<FileComposition<MenuFile>>
                                         RelationMenuFiles       { get; set; }
 
-        public CloneSet(MenuFile rootmenu)
+        public RelationTree(MenuFile rootmenu)
+            : base(null)
         {
             TypedFile           = rootmenu;
             RelationMenuFiles   = new List<FileComposition<MenuFile>>();
@@ -27,28 +28,28 @@ namespace CM3D2DataViewer
                     if(null != RelationMenuFiles.FirstOrDefault(j => j.File == menu))
                         continue;
 
-                    var comp    = FileComposition.Create(menu);
+                    var comp    = FileComposition.Create(this, menu);
 
                     ParseMenu(comp);
                     RelationMenuFiles.Add(comp);
                 } else
                 if(i is MateFile)
                 {
-                    var comp    = FileComposition.Create((MateFile)i);
+                    var comp    = FileComposition.Create(this, (MateFile)i);
 
                     ParseMate(comp);
                     RelationFiles.Add(comp);
                 } else
                 if(i is ModelSummary)
                 {
-                    var comp    = FileComposition.Create((ModelSummary)i);
+                    var comp    = FileComposition.Create(this, (ModelSummary)i);
 
                     ParseModel(comp);
                     RelationFiles.Add(comp);
                 } else
                 if(i is TexSummary)
                 {
-                    RelationFiles.Add(FileComposition.Create((TexSummary)i));
+                    RelationFiles.Add(FileComposition.Create(this, (TexSummary)i));
                 }
             }
         }
@@ -63,28 +64,31 @@ namespace CM3D2DataViewer
 
                 if(i is MenuFile)
                 {
-                    var comp    = FileComposition.Create((MenuFile)i);
+                    var comp    = FileComposition.Create(this, (MenuFile)i);
 
-                  //ParseMenu(comp);    // 循環参照していると無限に解析するのでこれ以上のメニュー解析はしない
-                    RelationFiles.Add(comp);
+                    // 循環参照していると無限に解析するのでこれ以上のメニュー解析はしない
+                    if(comp.Level < 10)
+                        ParseMenu(comp);
+
+                    menu.RelationFiles.Add(comp);
                 } else
                 if(i is MateFile)
                 {
-                    var comp    = FileComposition.Create((MateFile)i);
+                    var comp    = FileComposition.Create(this, (MateFile)i);
 
                     ParseMate(comp);
-                    RelationFiles.Add(comp);
+                    menu.RelationFiles.Add(comp);
                 } else
                 if(i is ModelSummary)
                 {
-                    var comp    = FileComposition.Create((ModelSummary)i);
+                    var comp    = FileComposition.Create(this, (ModelSummary)i);
 
                     ParseModel(comp);
-                    RelationFiles.Add(comp);
+                    menu.RelationFiles.Add(comp);
                 } else
                 if(i is TexSummary)
                 {
-                    RelationFiles.Add(FileComposition.Create((TexSummary)i));
+                    menu.RelationFiles.Add(FileComposition.Create(this, (TexSummary)i));
                 }
             }
         }
@@ -100,7 +104,7 @@ namespace CM3D2DataViewer
                 var tex = DataManager.Instance.FindItem(name) as TexSummary;
 
                 if(null != tex)
-                    mate.RelationFiles.Add(FileComposition.Create(tex));
+                    mate.RelationFiles.Add(FileComposition.Create(this, tex));
             }
         }
 
@@ -117,7 +121,7 @@ namespace CM3D2DataViewer
                 var tex = DataManager.Instance.FindItem(name) as TexSummary;
 
                 if(null != tex)
-                    model.RelationFiles.Add(FileComposition.Create(tex));
+                    model.RelationFiles.Add(FileComposition.Create(this, tex));
             }
         }
 
@@ -147,16 +151,19 @@ namespace CM3D2DataViewer
     public abstract class FileComposition
     {
         public abstract BaseFile        File                    { get; }
+        public FileComposition          ReferencedFrom          { get; private set; }
         public List<FileComposition>    RelationFiles           { get; private set; }
+        public int                      Level                   { get { return ReferencedFrom == null ? 0 : ReferencedFrom.Level + 1; } }
 
-        public FileComposition()
+        public FileComposition(FileComposition from)
         {
+            ReferencedFrom  = from;
             RelationFiles   = new List<FileComposition>();
         }
 
-        public static FileComposition<T> Create<T>(T file) where T : BaseFile
+        public static FileComposition<T> Create<T>(FileComposition from, T file) where T : BaseFile
         {
-            var comp        = new FileComposition<T>();
+            var comp        = new FileComposition<T>(from);
             comp.TypedFile  = file;
 
             return comp;
@@ -199,7 +206,8 @@ namespace CM3D2DataViewer
         public override BaseFile        File                    { get { return TypedFile; } }
         public T                        TypedFile               { get; set; }
 
-        public FileComposition()
+        public FileComposition(FileComposition from)
+            : base(from)
         {
         }
 

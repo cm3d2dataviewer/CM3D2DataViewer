@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CM3D2MenuControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbFileOpen = new System.Windows.Forms.ToolStripButton();
             this.tsbDirectoryOpen = new System.Windows.Forms.ToolStripButton();
             this.tsbFileSave = new System.Windows.Forms.ToolStripButton();
             this.tsbLoadBackup = new System.Windows.Forms.ToolStripButton();
-            this.tsbClone = new System.Windows.Forms.ToolStripButton();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.tbDescription = new System.Windows.Forms.TextBox();
@@ -42,13 +42,17 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tbScript = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.bOpenRelation = new System.Windows.Forms.Button();
+            this.bDeleteFiles = new System.Windows.Forms.Button();
             this.tvRelationTree = new System.Windows.Forms.TreeView();
             this.bAnalysisRelation = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.itemCloneControl1 = new CM3D2DataViewer.ItemCloneControl();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -58,8 +62,8 @@
             this.tsbFileOpen,
             this.tsbDirectoryOpen,
             this.tsbFileSave,
-            this.tsbLoadBackup,
-            this.tsbClone});
+            this.tsbLoadBackup});
+            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(696, 25);
@@ -103,16 +107,6 @@
             this.tsbLoadBackup.Visible = false;
             this.tsbLoadBackup.Click += new System.EventHandler(this.tsbLoadBackup_Click);
             // 
-            // tsbClone
-            // 
-            this.tsbClone.Image = ((System.Drawing.Image)(resources.GetObject("tsbClone.Image")));
-            this.tsbClone.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbClone.Name = "tsbClone";
-            this.tsbClone.Size = new System.Drawing.Size(52, 22);
-            this.tsbClone.Text = "複製";
-            this.tsbClone.Visible = false;
-            this.tsbClone.Click += new System.EventHandler(this.tsbClone_Click);
-            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -146,7 +140,9 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.ImageList = this.imageList1;
             this.tabControl1.Location = new System.Drawing.Point(0, 111);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -156,10 +152,11 @@
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.tbScript);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.ImageIndex = 0;
+            this.tabPage1.Location = new System.Drawing.Point(4, 23);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(688, 261);
+            this.tabPage1.Size = new System.Drawing.Size(688, 260);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "スクリプト";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -172,42 +169,44 @@
             this.tbScript.Multiline = true;
             this.tbScript.Name = "tbScript";
             this.tbScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbScript.Size = new System.Drawing.Size(682, 255);
+            this.tbScript.Size = new System.Drawing.Size(682, 254);
             this.tbScript.TabIndex = 2;
             this.tbScript.WordWrap = false;
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.bOpenRelation);
+            this.tabPage2.Controls.Add(this.bDeleteFiles);
             this.tabPage2.Controls.Add(this.tvRelationTree);
             this.tabPage2.Controls.Add(this.bAnalysisRelation);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.ImageIndex = 1;
+            this.tabPage2.Location = new System.Drawing.Point(4, 23);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(688, 261);
+            this.tabPage2.Size = new System.Drawing.Size(688, 260);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "関連リソース";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // bOpenRelation
+            // bDeleteFiles
             // 
-            this.bOpenRelation.Enabled = false;
-            this.bOpenRelation.Location = new System.Drawing.Point(212, 6);
-            this.bOpenRelation.Name = "bOpenRelation";
-            this.bOpenRelation.Size = new System.Drawing.Size(200, 23);
-            this.bOpenRelation.TabIndex = 2;
-            this.bOpenRelation.Text = "選択している関連リソースを開く";
-            this.bOpenRelation.UseVisualStyleBackColor = true;
-            this.bOpenRelation.Click += new System.EventHandler(this.bOpenRelation_Click);
+            this.bDeleteFiles.Enabled = false;
+            this.bDeleteFiles.Location = new System.Drawing.Point(132, 6);
+            this.bDeleteFiles.Name = "bDeleteFiles";
+            this.bDeleteFiles.Size = new System.Drawing.Size(120, 23);
+            this.bDeleteFiles.TabIndex = 2;
+            this.bDeleteFiles.Text = "削除";
+            this.bDeleteFiles.UseVisualStyleBackColor = true;
+            this.bDeleteFiles.Click += new System.EventHandler(this.bDeleteFiles_Click);
             // 
             // tvRelationTree
             // 
             this.tvRelationTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tvRelationTree.CheckBoxes = true;
             this.tvRelationTree.Location = new System.Drawing.Point(6, 35);
             this.tvRelationTree.Name = "tvRelationTree";
-            this.tvRelationTree.Size = new System.Drawing.Size(676, 220);
+            this.tvRelationTree.Size = new System.Drawing.Size(676, 219);
             this.tvRelationTree.TabIndex = 1;
             this.tvRelationTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvRelationTree_AfterSelect);
             this.tvRelationTree.DoubleClick += new System.EventHandler(this.tvRelationTree_DoubleClick);
@@ -217,11 +216,41 @@
             this.bAnalysisRelation.Enabled = false;
             this.bAnalysisRelation.Location = new System.Drawing.Point(6, 6);
             this.bAnalysisRelation.Name = "bAnalysisRelation";
-            this.bAnalysisRelation.Size = new System.Drawing.Size(200, 23);
+            this.bAnalysisRelation.Size = new System.Drawing.Size(120, 23);
             this.bAnalysisRelation.TabIndex = 0;
             this.bAnalysisRelation.Text = "関連リソースの解析";
             this.bAnalysisRelation.UseVisualStyleBackColor = true;
             this.bAnalysisRelation.Click += new System.EventHandler(this.bAnalysisRelation_Click);
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.itemCloneControl1);
+            this.tabPage3.ImageIndex = 2;
+            this.tabPage3.Location = new System.Drawing.Point(4, 23);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(688, 260);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "コピー";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // itemCloneControl1
+            // 
+            this.itemCloneControl1.Data = null;
+            this.itemCloneControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.itemCloneControl1.Enabled = false;
+            this.itemCloneControl1.Location = new System.Drawing.Point(3, 3);
+            this.itemCloneControl1.Name = "itemCloneControl1";
+            this.itemCloneControl1.Size = new System.Drawing.Size(682, 254);
+            this.itemCloneControl1.TabIndex = 0;
+            // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "ic_list_black_18dp.png");
+            this.imageList1.Images.SetKeyName(1, "ic_share_black_18dp.png");
+            this.imageList1.Images.SetKeyName(2, "ic_content_copy_black_18dp.png");
             // 
             // CM3D2MenuControl
             // 
@@ -240,6 +269,7 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -251,7 +281,6 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.ToolStripButton tsbDirectoryOpen;
-        private System.Windows.Forms.ToolStripButton tsbClone;
         private System.Windows.Forms.ToolStripButton tsbFileSave;
         private System.Windows.Forms.TextBox tbDescription;
         private System.Windows.Forms.ToolStripButton tsbLoadBackup;
@@ -259,8 +288,11 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TextBox tbScript;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Button bOpenRelation;
         private System.Windows.Forms.TreeView tvRelationTree;
         private System.Windows.Forms.Button bAnalysisRelation;
+        private System.Windows.Forms.TabPage tabPage3;
+        private ItemCloneControl itemCloneControl1;
+        private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.Button bDeleteFiles;
     }
 }

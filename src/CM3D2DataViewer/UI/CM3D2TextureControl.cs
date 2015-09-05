@@ -71,6 +71,8 @@ namespace CM3D2DataViewer
             Data.SetImageData(File.ReadAllBytes(expfile));
 
             TexFile.ToFile(Data.FileName, Data);
+
+            UpdateView();
         }
 
         private void tsbExport_Click(object sender, EventArgs e)
@@ -128,6 +130,65 @@ namespace CM3D2DataViewer
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        public Point                DownPos;
+        public int                  DragState;
+
+        private void pictureBox1_MouseCaptureChanged(object sender, EventArgs e)
+        {
+            if(!pictureBox1.Capture)
+                DragState   = 0;
+
+        }
+
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Left)
+            {
+                DownPos             = e.Location;
+                pictureBox1.Capture = true;
+                DragState           = 1;
+            }
+        }
+
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(DragState == 1)
+            {
+                var x   = e.X - DownPos.X;
+                var y   = e.Y - DownPos.Y;
+
+                if(x*x+y*y >= 16)
+                {
+                    DragState   = 2;
+
+                    var dir = Path.GetDirectoryName(Data.FileName);
+                    var name= Path.GetFileName(Data.AssetPath);
+                    var file= Path.Combine(dir, name);
+
+                    if(File.Exists(file))
+                    {
+                        var data= new DataObject(DataFormats.FileDrop, new string[] {  file });
+
+                        DoDragDrop(data, DragDropEffects.Copy);
+                    }
+                }
+            }
+        }
+
+        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Left)
+            {
+                pictureBox1.Capture = false;
+                DragState           = 0;
+            }
+        }
+
+        private void tsbCopyToClipboard_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetImage(pictureBox1.Image);
         }
     }
 }

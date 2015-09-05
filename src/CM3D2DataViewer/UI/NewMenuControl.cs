@@ -16,7 +16,7 @@ namespace CM3D2DataViewer
         public MenuFile                 NewMenu                 { get; set; }
         public string                   SrcName                 { get; private set; }
         public string                   NewName                 { get; private set; }
-        public CloneSet                 CloneSet                { get; private set; }
+        public RelationTree                 CloneSet                { get; private set; }
 
         public NewMenuControl()
         {
@@ -32,7 +32,7 @@ namespace CM3D2DataViewer
 
             bCreate.Enabled = System.Diagnostics.Debugger.IsAttached;
 
-            CloneSet    = new CloneSet(SrcMenu);
+            CloneSet    = new RelationTree(SrcMenu);
 
             CloneSet.Dump();
 

@@ -38,6 +38,7 @@
             this.tsbImageOpen = new System.Windows.Forms.ToolStripButton();
             this.tsbExport = new System.Windows.Forms.ToolStripButton();
             this.tsbImport = new System.Windows.Forms.ToolStripButton();
+            this.tsbCopyToClipboard = new System.Windows.Forms.ToolStripButton();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -47,7 +48,7 @@
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.textBox1.Font = new System.Drawing.Font("ＭＳ ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.textBox1.Location = new System.Drawing.Point(0, 25);
+            this.textBox1.Location = new System.Drawing.Point(0, 50);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -60,9 +61,9 @@
             this.panel1.AutoScroll = true;
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 112);
+            this.panel1.Location = new System.Drawing.Point(0, 137);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(625, 323);
+            this.panel1.Size = new System.Drawing.Size(625, 298);
             this.panel1.TabIndex = 1;
             // 
             // pictureBox1
@@ -73,6 +74,10 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseCaptureChanged += new System.EventHandler(this.pictureBox1_MouseCaptureChanged);
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
             // toolStrip1
             // 
@@ -82,10 +87,12 @@
             this.tsbDirectoryOpen,
             this.tsbImageOpen,
             this.tsbExport,
-            this.tsbImport});
+            this.tsbImport,
+            this.tsbCopyToClipboard});
+            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(625, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(625, 50);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -134,6 +141,15 @@
             this.tsbImport.Text = "インポート";
             this.tsbImport.Click += new System.EventHandler(this.tsbImport_Click);
             // 
+            // tsbCopyToClipboard
+            // 
+            this.tsbCopyToClipboard.Image = ((System.Drawing.Image)(resources.GetObject("tsbCopyToClipboard.Image")));
+            this.tsbCopyToClipboard.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbCopyToClipboard.Name = "tsbCopyToClipboard";
+            this.tsbCopyToClipboard.Size = new System.Drawing.Size(160, 22);
+            this.tsbCopyToClipboard.Text = "クリップボードにコピー";
+            this.tsbCopyToClipboard.Click += new System.EventHandler(this.tsbCopyToClipboard_Click);
+            // 
             // CM3D2TextureControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -164,5 +180,6 @@
         private System.Windows.Forms.ToolStripButton tsbFileOpen;
         private System.Windows.Forms.ToolStripButton tsbImageOpen;
         private System.Windows.Forms.ToolStripButton tsbDirectoryOpen;
+        private System.Windows.Forms.ToolStripButton tsbCopyToClipboard;
     }
 }

@@ -39,6 +39,8 @@
             this.tsddbArchive = new System.Windows.Forms.ToolStripDropDownButton();
             this.tscbArch = new System.Windows.Forms.ToolStripComboBox();
             this.tsbRunGame = new System.Windows.Forms.ToolStripButton();
+            this.tsbReloadMod = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -55,7 +57,7 @@
             this.tabControl1.Location = new System.Drawing.Point(1105, 26);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(479, 856);
+            this.tabControl1.Size = new System.Drawing.Size(479, 832);
             this.tabControl1.TabIndex = 0;
             this.tabControl1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tabControl1_MouseDown);
             // 
@@ -69,7 +71,7 @@
             // 
             this.splitter1.Location = new System.Drawing.Point(1102, 26);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 856);
+            this.splitter1.Size = new System.Drawing.Size(3, 832);
             this.splitter1.TabIndex = 2;
             this.splitter1.TabStop = false;
             // 
@@ -80,7 +82,9 @@
             this.tsbDebug,
             this.tsddbArchive,
             this.tscbArch,
-            this.tsbRunGame});
+            this.tsbRunGame,
+            this.tsbReloadMod,
+            this.toolStripButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1584, 26);
@@ -137,13 +141,34 @@
             this.tsbRunGame.Text = "ゲーム起動";
             this.tsbRunGame.Click += new System.EventHandler(this.tsbRunGame_Click);
             // 
+            // tsbReloadMod
+            // 
+            this.tsbReloadMod.Image = ((System.Drawing.Image)(resources.GetObject("tsbReloadMod.Image")));
+            this.tsbReloadMod.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbReloadMod.Name = "tsbReloadMod";
+            this.tsbReloadMod.Size = new System.Drawing.Size(150, 23);
+            this.tsbReloadMod.Text = "ModExport再読み込み";
+            this.tsbReloadMod.Visible = false;
+            this.tsbReloadMod.Click += new System.EventHandler(this.tsbReloadMod_Click);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 23);
+            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Visible = false;
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 26);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(302, 856);
+            this.panel1.Size = new System.Drawing.Size(302, 832);
             this.panel1.TabIndex = 4;
             // 
             // label1
@@ -152,7 +177,7 @@
             this.label1.Font = new System.Drawing.Font("MS UI Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(302, 856);
+            this.label1.Size = new System.Drawing.Size(302, 832);
             this.label1.TabIndex = 0;
             this.label1.Text = "GameDataのディレクトリをここにドラッグ＆ドロップしてください";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -161,17 +186,17 @@
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.textBox1.Font = new System.Drawing.Font("ＭＳ ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.textBox1.Location = new System.Drawing.Point(0, 886);
+            this.textBox1.Location = new System.Drawing.Point(0, 862);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1584, 36);
+            this.textBox1.Size = new System.Drawing.Size(1584, 60);
             this.textBox1.TabIndex = 5;
             this.textBox1.WordWrap = false;
             // 
             // splitter2
             // 
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitter2.Location = new System.Drawing.Point(0, 882);
+            this.splitter2.Location = new System.Drawing.Point(0, 858);
             this.splitter2.Name = "splitter2";
             this.splitter2.Size = new System.Drawing.Size(1584, 4);
             this.splitter2.TabIndex = 6;
@@ -183,7 +208,7 @@
             this.dataManagerControl1.Dock = System.Windows.Forms.DockStyle.Left;
             this.dataManagerControl1.Location = new System.Drawing.Point(302, 26);
             this.dataManagerControl1.Name = "dataManagerControl1";
-            this.dataManagerControl1.Size = new System.Drawing.Size(800, 856);
+            this.dataManagerControl1.Size = new System.Drawing.Size(800, 832);
             this.dataManagerControl1.TabIndex = 1;
             this.dataManagerControl1.Visible = false;
             // 
@@ -228,6 +253,8 @@
         private System.Windows.Forms.ToolStripComboBox tscbArch;
         private System.Windows.Forms.ToolStripButton tsbRunGame;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.ToolStripButton tsbReloadMod;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }
 

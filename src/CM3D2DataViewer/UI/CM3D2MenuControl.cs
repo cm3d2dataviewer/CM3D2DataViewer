@@ -41,17 +41,24 @@ namespace CM3D2DataViewer
         private void UpdateView()
         {
             flowLayoutPanel1.Controls.Clear();
+            tvRelationTree.Nodes.Clear();
+
+            itemCloneControl1.Data  = data;
 
             if(data == null)
             {
                 bAnalysisRelation.Enabled   = false;
                 toolStrip1.Enabled          = false;
+                itemCloneControl1.Enabled   = false;
+                bDeleteFiles.Enabled        = false;
                 tbScript.Text       = "";
                 return;
             }
 
-            bAnalysisRelation.Enabled  = true;
+            bAnalysisRelation.Enabled   = true;
             toolStrip1.Enabled          = true;
+            itemCloneControl1.Enabled   = true;
+            bDeleteFiles.Enabled        = true;
 
             var sb      = new StringBuilder();
 
@@ -74,30 +81,6 @@ namespace CM3D2DataViewer
                 if(i.Count == 0)
                     continue;
 
-                #if false
-                Button  b;
-
-                switch(i[0])
-                {
-                case "アイテム":
-                case "icons":
-                case "additem":
-                    b       = new Button() { AutoSize= true, Text= i[1], Tag= i };
-                    b.Click +=B_Click;
-
-                    flowLayoutPanel1.Controls.Add(b);
-
-                    break;
-
-                case "マテリアル変更":
-                    b       = new Button() { AutoSize= true, Text= i[3], Tag= i };
-                    b.Click +=B_Click;
-
-                    flowLayoutPanel1.Controls.Add(b);
-
-                    break;
-                }
-                #else
                 foreach(var j in i)
                 {
                     if(DataManager.Instance.FindItem(j) != null)
@@ -108,7 +91,6 @@ namespace CM3D2DataViewer
                         flowLayoutPanel1.Controls.Add(b);
                     }
                 }
-                #endif
             }
         }
 
@@ -211,13 +193,13 @@ namespace CM3D2DataViewer
             if(Data == null)
                 return;
 
-            var cloneset    = new CloneSet(Data);
+            var cloneset    = new RelationTree(Data);
 
             tvRelationTree.Nodes.Clear();
-
             BuildResourceTree(tvRelationTree.Nodes, cloneset);
-
             tvRelationTree.ExpandAll();
+
+            bDeleteFiles.Enabled    = true;
         }
 
         private string MakeLabel(BaseFile file)
@@ -245,9 +227,9 @@ namespace CM3D2DataViewer
             var node    = nodes.Add(text);
             node.Tag    = comp;
 
-            if(comp is CloneSet)
+            if(comp is RelationTree)
             {
-                var cs  = (CloneSet)comp;
+                var cs  = (RelationTree)comp;
 
                 foreach(var i in cs.RelationMenuFiles)
                     BuildResourceTree(node.Nodes, i);
@@ -269,7 +251,6 @@ namespace CM3D2DataViewer
 
         private void tvRelationTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            bOpenRelation.Enabled   = tvRelationTree.SelectedNode != null;
         }
 
         private void tvRelationTree_DoubleClick(object sender, EventArgs e)
@@ -283,6 +264,35 @@ namespace CM3D2DataViewer
             var data= (FileComposition)hti.Node.Tag;
 
             Open(Path.GetFileName(data.File.FileName));
+        }
+
+        private void bDeleteFiles_Click(object sender, EventArgs e)
+        {
+            var nodes   = Traversal(tvRelationTree.Nodes).Where(i => i.Checked).ToArray();
+
+            if(nodes.Length == 0)
+                return;
+
+            var files   = nodes.Select(j => (FileComposition)j.Tag).ToArray();
+
+            if(MessageBox.Show("チェックされた以下のファイルを削除します。\nよろしいですか？\n"
+                + string.Join("\n", files.Select(i => Path.GetFileName(i.File.FileName)).ToArray()),
+                "削除確認", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                return;
+
+            foreach(var i in files)
+                try {  File.Delete(i.File.FileName); } catch {}
+        }
+
+        public IEnumerable<TreeNode> Traversal(TreeNodeCollection nodes)
+        {
+            foreach(TreeNode i in nodes)
+            {
+                yield return i;
+
+                foreach(var j in Traversal(i.Nodes))
+                    yield return j;
+            }
         }
     }
 

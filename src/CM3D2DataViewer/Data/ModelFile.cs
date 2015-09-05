@@ -42,6 +42,11 @@ namespace CM3D2DataViewer
         public byte                     Unknown                 { get; set; }
         public int                      ParentID                { get; set; }
         public float[]                  Params                  { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     public class ModelMesh
@@ -51,10 +56,9 @@ namespace CM3D2DataViewer
         public int                      NumRefBones             { get; set; }
         public List<ModelRefBone>       RefBones                { get; set; }
         public List<ModelVertex>        Vertices                { get; set; }
+        public int                      NumTangents             { get; set; }
+        public List<Vector4>            Tangents                { get; set; }
         public List<ModelSkin>          Skins                   { get; set; }
-        public float                    Unknown2                { get; set; }   // 0
-      //public int                      NumUnknown3             { get; set; }   // 1
-      //public List<Param>              Params                  { get; set; }
         public List<ModelPrimitive>     Primitives              { get; set; }
     }
 
@@ -62,6 +66,11 @@ namespace CM3D2DataViewer
     {
         public string                   Name                    { get; set; }
         public float[]                  Matrix                  { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     public struct ModelVertex
@@ -75,6 +84,13 @@ namespace CM3D2DataViewer
             P   = p;
             N   = n;
             T   = new Vector2(t.X, t.Y);
+        }
+
+        public ModelVertex(Vector3 p, Vector3 n, Vector2 t)
+        {
+            P   = p;
+            N   = n;
+            T   = t;
         }
 
         public bool Equals(ModelVertex obj)
@@ -100,9 +116,8 @@ namespace CM3D2DataViewer
 
     public class ModelSkin
     {
-        public int                      U;
         public short                    B1, B2, B3, B4;
-        public float                    W1, W2, W3;
+        public float                    W1, W2, W3, W4;
     }
 
     public class ModelMaterial
@@ -123,6 +138,53 @@ namespace CM3D2DataViewer
     }
 
     #if true
+    public struct Vector4
+    {
+        public static Vector4           Zero    = new Vector4(0, 0, 0, 0);
+
+        public float                    X, Y, Z, W;
+
+        public Vector4(float x, float y, float z, float w)
+        {
+            X   = x;
+            Y   = y;
+            Z   = z;
+            W   = w;
+        }
+
+        public bool Equals(Vector4 obj)
+        {
+            return X == obj.X
+                && Y == obj.Y
+                && Z == obj.Z
+                && W == obj.W;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Vector4 && Equals((Vector4)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (X+Y+Z+W).GetHashCode()
+                 ^ X.GetHashCode()
+                 ^ Y.GetHashCode()
+                 ^ Z.GetHashCode()
+                 ^ W.GetHashCode();
+        }
+
+        public static bool operator==(Vector4 a, Vector4 b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator!=(Vector4 a, Vector4 b)
+        {
+            return !a.Equals(b);
+        }
+    }
+
     public struct Vector3
     {
         public static Vector3           Zero    = new Vector3(0, 0, 0);

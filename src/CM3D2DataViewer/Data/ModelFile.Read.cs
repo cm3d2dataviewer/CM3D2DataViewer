@@ -70,8 +70,12 @@ namespace CM3D2DataViewer
                 i.Matrix    = ReadSingleArray(r, 16);
 
             data.Vertices   = ReadList(r, data.NumVerts, ReadVertex);
+            data.NumTangents= r.ReadInt32();
+
+            System.Diagnostics.Debug.Assert(data.NumTangents == 0);
+
+            data.Tangents   = ReadList(r, data.NumTangents, ReadVector4);
             data.Skins      = ReadList(r, data.NumVerts, ReadSkin);
-            data.Unknown2   = r.ReadSingle();
 
           //System.Diagnostics.Debug.Assert(data.Unknown2 == 0);
 
@@ -103,7 +107,6 @@ namespace CM3D2DataViewer
         private static ModelSkin ReadSkin(BinaryReader r)
         {
             var data    = new ModelSkin();
-            data.U      = r.ReadInt32();
             data.B1     = r.ReadInt16();
             data.B2     = r.ReadInt16();
             data.B3     = r.ReadInt16();
@@ -111,6 +114,7 @@ namespace CM3D2DataViewer
             data.W1     = r.ReadSingle();
             data.W2     = r.ReadSingle();
             data.W3     = r.ReadSingle();
+            data.W4     = r.ReadSingle();
 
             return data;
         }

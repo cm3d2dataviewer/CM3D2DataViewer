@@ -15,6 +15,7 @@ namespace CM3D2DataViewer
         public static Form1             Instance                { get; private set; }
 
         public DataManager              DataManager             { get; private set; }
+        public ModManager               ModManager              { get; private set; }
         public TextBox                  MessageTextBox          { get { return textBox1; } }
                     
         public Form1()
@@ -29,13 +30,27 @@ namespace CM3D2DataViewer
             base.OnLoad(e);
 
             DataManager = new DataManager();
+            ModManager  = new ModManager();
 
             if(Config.Instance.DataDir != null)
             {
+                #if ENABLE_MOD
                 try
                 {
                     if(Directory.Exists(Config.Instance.DataDir))
+                        LoadMods(Config.Instance.DataDir);
+                } catch(Exception ex)
+                {
+                    System.Diagnostics.Debug.Print(ex.ToString());
+                }
+                #endif
+
+                try
+                {
+                    if(Directory.Exists(Config.Instance.DataDir))
+                    {
                         LoadFile(Config.Instance.DataDir);
+                    }
 
                     foreach(var i in Directory.GetFiles(Config.Instance.DataDir, "*.arc"))
                     {
@@ -130,6 +145,11 @@ namespace CM3D2DataViewer
             }
 
             return null;
+        }
+
+        public void LoadMods(string dir)
+        {
+            ModManager.Instance.Load(dir);
         }
 
         public void LoadFile(string file)
@@ -236,7 +256,7 @@ namespace CM3D2DataViewer
         {
             var sb  = new StringBuilder();
 
-            foreach(var i in DataManager.Instance.Menus)
+            foreach(var i in DataManager.Instance.Menus.Values)
             {
                 foreach(var j in i.Scripts)
                 {
@@ -263,8 +283,11 @@ namespace CM3D2DataViewer
             try
             {
                 System.Diagnostics.Process.Start(psi);
+
+                Globals.Message("ゲームを起動しました -- {0} {1}", psi.FileName, psi.Arguments);
             } catch(Exception ex)
             {
+                Globals.Message("ゲームの起動に失敗しました -- {0} {1}", psi.FileName, psi.Arguments);
                 MessageBox.Show(ex.ToString());
             }
         }
@@ -292,6 +315,17 @@ namespace CM3D2DataViewer
         {
             Config.Instance.RunArch = tscbArch.Text;
             Config.Instance.Save();
+        }
+
+        private void tsbReloadMod_Click(object sender, EventArgs e)
+        {
+            dataManagerControl1.ReloadMods();
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            //var fbx = FbxLib.FbxFile.FromFile(@"D:\sh0\Documents\3dsMax\export\Test.FBX");
+
         }
     }
 }

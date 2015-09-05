@@ -30,14 +30,15 @@
         {
             this.components = new System.ComponentModel.Container();
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.splitter1 = new System.Windows.Forms.Splitter();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.cM3D2MenuControl1 = new CM3D2DataViewer.CM3D2MenuControl();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiNew = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAddColor = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel1.SuspendLayout();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.modEditorControl1 = new CM3D2DataViewer.ModEditorControl();
+            this.cM3D2MenuControl1 = new CM3D2DataViewer.CM3D2MenuControl();
             this.contextMenuStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeView1
@@ -50,33 +51,6 @@
             this.treeView1.Size = new System.Drawing.Size(265, 623);
             this.treeView1.TabIndex = 0;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
-            // 
-            // splitter1
-            // 
-            this.splitter1.Location = new System.Drawing.Point(265, 0);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 623);
-            this.splitter1.TabIndex = 1;
-            this.splitter1.TabStop = false;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.cM3D2MenuControl1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(268, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(729, 623);
-            this.panel1.TabIndex = 2;
-            // 
-            // cM3D2MenuControl1
-            // 
-            this.cM3D2MenuControl1.Data = null;
-            this.cM3D2MenuControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cM3D2MenuControl1.Location = new System.Drawing.Point(0, 0);
-            this.cM3D2MenuControl1.Name = "cM3D2MenuControl1";
-            this.cM3D2MenuControl1.Size = new System.Drawing.Size(729, 623);
-            this.cM3D2MenuControl1.TabIndex = 0;
-            this.cM3D2MenuControl1.OpenItem += new System.EventHandler<CM3D2DataViewer.OpenItemEventArgs>(this.cM3D2MenuControl1_OpenItem);
             // 
             // contextMenuStrip1
             // 
@@ -101,6 +75,45 @@
             this.tsmiAddColor.Text = "カラー追加";
             this.tsmiAddColor.Click += new System.EventHandler(this.tsmiAddColor_Click);
             // 
+            // splitter1
+            // 
+            this.splitter1.Location = new System.Drawing.Point(265, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 623);
+            this.splitter1.TabIndex = 1;
+            this.splitter1.TabStop = false;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.modEditorControl1);
+            this.panel1.Controls.Add(this.cM3D2MenuControl1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(268, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(729, 623);
+            this.panel1.TabIndex = 2;
+            // 
+            // modEditorControl1
+            // 
+            this.modEditorControl1.Data = null;
+            this.modEditorControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.modEditorControl1.Location = new System.Drawing.Point(0, 0);
+            this.modEditorControl1.Name = "modEditorControl1";
+            this.modEditorControl1.Size = new System.Drawing.Size(729, 623);
+            this.modEditorControl1.TabIndex = 1;
+            this.modEditorControl1.Visible = false;
+            this.modEditorControl1.OpenItem += new System.EventHandler<CM3D2DataViewer.OpenItemEventArgs>(this.modEditorControl1_OpenItem);
+            // 
+            // cM3D2MenuControl1
+            // 
+            this.cM3D2MenuControl1.Data = null;
+            this.cM3D2MenuControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cM3D2MenuControl1.Location = new System.Drawing.Point(0, 0);
+            this.cM3D2MenuControl1.Name = "cM3D2MenuControl1";
+            this.cM3D2MenuControl1.Size = new System.Drawing.Size(729, 623);
+            this.cM3D2MenuControl1.TabIndex = 0;
+            this.cM3D2MenuControl1.OpenItem += new System.EventHandler<CM3D2DataViewer.OpenItemEventArgs>(this.cM3D2MenuControl1_OpenItem);
+            // 
             // DataManagerControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -110,8 +123,8 @@
             this.Controls.Add(this.treeView1);
             this.Name = "DataManagerControl";
             this.Size = new System.Drawing.Size(997, 623);
-            this.panel1.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -125,5 +138,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem tsmiNew;
         private System.Windows.Forms.ToolStripMenuItem tsmiAddColor;
+        private ModEditorControl modEditorControl1;
     }
 }

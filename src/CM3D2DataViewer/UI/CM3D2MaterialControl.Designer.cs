@@ -61,6 +61,7 @@
             this.tsbDirectoryOpen,
             this.tsbFileSave,
             this.tsbLoadBackup});
+            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(715, 25);

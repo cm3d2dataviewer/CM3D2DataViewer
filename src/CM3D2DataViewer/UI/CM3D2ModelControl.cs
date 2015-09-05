@@ -25,9 +25,27 @@ namespace CM3D2DataViewer
         {
             base.OnLoad(e);
 
-          //tscbType.Items.Clear();
-          //tscbType.Items.Add("OBJ");
-            tscbType.SelectedIndex  = 0;
+            var config  = Config.Instance;
+
+            cbExportType.SelectedIndex  = cbExportType.Items.Cast<string>().ToList().IndexOf(config.ModelType);
+            cbImportType.SelectedIndex  = cbImportType.Items.Cast<string>().ToList().IndexOf(config.ModelType);
+            cbShader.SelectedIndex      = cbShader.Items.Cast<string>().ToList().IndexOf(config.Shader);
+            cbExportMorph.Checked       = config.ExportSkin;
+            cbExportSkin .Checked       = config.ExportMorph;
+            cbChangeShader.Checked      = config.ChangeShader;
+            nudMinDist.Value            = (decimal)Config.Instance.MorphMin;
+            nudMaxDist.Value            = (decimal)Config.Instance.MorphMax;
+            nudImportScale.Value        = (decimal)Config.Instance.ImportScale;
+            nudExportScale.Value        = (decimal)Config.Instance.ExportScale;
+
+            if(System.Diagnostics.Debugger.IsAttached)
+            {
+                tsbDebug.Visible    = true;
+            } else
+            {
+                cbImportType.Items.Remove("MQO");
+                cbImportType.Items.Remove("DAE");
+            }
         }
 
         private void SetData(ModelFile value)
@@ -51,7 +69,9 @@ namespace CM3D2DataViewer
                 return;
             }
 
-                toolStrip1.Enabled  = true;
+            toolStrip1.Enabled  = true;
+            cbRefModel.Text     = Data.GetBackupFileName();
+
             var sb  = new StringBuilder();
 
             sb.AppendFormat("Magic:   \"{0}\"", Data.Magic).AppendLine();
@@ -190,64 +210,20 @@ namespace CM3D2DataViewer
             }
         }
 
-        private void tabPage3_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void tsbMqoOpen_Click(object sender, EventArgs e)
         {
             try
             {
+                /*
                 tsbExport_Click(sender, e);
 
                 var file    = Path.ChangeExtension(data.FileName, "."+tscbType.Text);
 
                 System.Diagnostics.Process.Start(file);
+                */
             } catch(Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-            }
-        }
-
-        private void tsbExport_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                switch(tscbType.Text)
-                {
-                case "OBJ": ExportOBJ();    break;
-                case "MQO": ExportMQO();    break;
-                case "DAE": ExportDAE();    break;
-                }
-            } catch(Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
-
-        private void tsbImport_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                switch(tscbType.Text)
-                {
-                case "OBJ": ImportOBJ();    break;
-              //case "MQO": ImportMQO();    break;
-              //case "DAE": ImportDAE();    break;
-                }
-            } catch(Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
-
-        private void tsbClose_Click(object sender, EventArgs e)
-        {
-            if(Parent is TabPage)
-            {
-                var tp  = (TabPage)Parent;
-                ((TabControl)tp.Parent).TabPages.Remove(tp);
             }
         }
 
@@ -294,6 +270,71 @@ namespace CM3D2DataViewer
 
                 Clipboard.SetText(sb.ToString());
             }
+        }
+
+        private void bImport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Data.Backup();
+
+                switch(cbImportType.Text)
+                {
+                case "OBJ": ImportOBJ();    break;
+                case "MQO": ImportMQO();    break;
+                case "DAE": ImportDAE();    break;
+                }
+            } catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void bExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                switch(cbExportType.Text)
+                {
+                case "OBJ": ExportOBJ();    break;
+                case "MQO": ExportMQO();    break;
+                case "DAE": ExportDAE();    break;
+                }
+            } catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void tsbRestore_Click(object sender, EventArgs e)
+        {
+            if(Data.Restore())
+                Data    = ModelFile.FromFile(Data.FileName);
+        }
+
+        private void cbRefModel_DragDrop(object sender, DragEventArgs e)
+        {
+            if(e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var files       = (string[])e.Data.GetData(DataFormats.FileDrop);
+                cbRefModel.Text = files[0];
+            }
+        }
+
+        private void cbRefModel_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect= e.Data.GetDataPresent(DataFormats.FileDrop)
+                ? e.AllowedEffect & DragDropEffects.Copy : DragDropEffects.None;
+        }
+
+        private void cbImportType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbExportType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -17,11 +17,19 @@ namespace CM3D2DataViewer
         public static string            FileName
             { get { return Path.Combine(Path.GetDirectoryName(typeof(Config).Assembly.Location), "config.xml"); } }
 
-        [Elem("DataDir")] public string DataDir                 { get; set; }
-        [Elem("CM3D2Tool")] public string CM3D2Tool             { get; set; }
-        [Elem("ReiPatcher")] public string ReiPatcher           { get; set; }
-        [Elem("RunArch")] public string RunArch                 { get; set; }
-
+        [Elem("DataDir")]       public string DataDir           { get; set; }
+        [Elem("CM3D2Tool")]     public string CM3D2Tool         { get; set; }
+        [Elem("ReiPatcher")]    public string ReiPatcher        { get; set; }
+        [Elem("RunArch")]       public string RunArch           { get; set; }
+        [Elem("ModelType")]     public string ModelType         { get; set; }
+        [Elem("ExportMorph")]   public bool   ExportMorph       { get; set; }
+        [Elem("ExportSkin")]    public bool   ExportSkin        { get; set; }
+        [Elem("ChangeShader")]  public bool   ChangeShader      { get; set; }
+        [Elem("Shader")]        public string Shader            { get; set; }
+        [Elem("MorphMin")]      public float  MorphMin          { get; set; }
+        [Elem("MorphMax")]      public float  MorphMax          { get; set; }
+        [Elem("ImportScale")]   public float  ImportScale       { get; set; }
+        [Elem("ExportScale")]   public float  ExportScale       { get; set; }
 
         static Config()
         {
@@ -36,7 +44,13 @@ namespace CM3D2DataViewer
 
         private Config()
         {
-            RunArch = "x86";
+            RunArch     = "x86";
+            ModelType   = "OBJ";
+            Shader      = "Toony_Lighted_Trans";
+            MorphMin    = 0.02f;
+            MorphMax    = 0.10f;
+            ImportScale = 1.00f;
+            ExportScale = 1.00f;
         }
 
         public void Save()

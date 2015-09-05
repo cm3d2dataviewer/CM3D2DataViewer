@@ -12,9 +12,11 @@ namespace CM3D2DataViewer
         public string                   Magic                   { get; set; }
         public int                      Version                 { get; set; }   // ?
         public List<string>             Descriptions            { get; set; }
+        public object                   Tag                     { get; set; }
 
-        public string GetBackupFileName(string ext = null)
+        public string GetBackupFileName(/*string ext = null*/)
         {
+#if false
             if(ext == null)
             {
                 ext = Path.GetExtension(FileName);
@@ -22,18 +24,33 @@ namespace CM3D2DataViewer
             }
 
             return Path.ChangeExtension(FileName, ext);
+#else
+            var filename= Path.GetFileName(FileName);
+            filename    = Path.Combine(DataManager.Instance.BackupDir, filename);
+
+            return filename;
+#endif
         }
 
-        public string Backup(string ext = null)
+        public string Backup(/*string ext = null*/)
         {
-            var bak = GetBackupFileName(ext);
+            var bak = GetBackupFileName(/*ext*/);
 
-            #if false // 拡張子が違ってもゲーム中に読み込まれてしまうので、バックアップは作成しない
             if(!File.Exists(bak))
                 File.Copy(FileName, bak);
-            #endif
 
             return bak;
+        }
+
+        public bool Restore(string ext = null)
+        {
+            var bak = GetBackupFileName(/*ext*/);
+
+            if(!File.Exists(bak))
+                return false;
+
+            File.Copy(bak, FileName, true);
+            return true;
         }
 
         public static string ReadString(BinaryReader r)
@@ -64,6 +81,19 @@ namespace CM3D2DataViewer
                 w.Write((byte)b.Length);
                 w.Write(b);
             }
+        }
+
+        public static Vector4 ReadVector4(BinaryReader r)
+        {
+            return new Vector4(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
+        }
+
+        public static void WriteVector4(BinaryWriter w, Vector4 v)
+        {
+            w.Write(v.X);
+            w.Write(v.Y);
+            w.Write(v.Z);
+            w.Write(v.W);
         }
 
         public static float[] ReadSingleArray(BinaryReader r, int n)
@@ -262,7 +292,6 @@ namespace CM3D2DataViewer
         public static void WriteParamTex(BinaryWriter w, ParamTex data)
         {
             WriteString(w, data.Name);
-            WriteString(w, data.SubType);
 
             if(data.TexName == null)
             {
@@ -270,6 +299,7 @@ namespace CM3D2DataViewer
                 return;
             }
 
+            WriteString(w, data.SubType);
             WriteString(w, data.TexName);
             WriteString(w, data.TexAsset);
             w.Write(data.R);

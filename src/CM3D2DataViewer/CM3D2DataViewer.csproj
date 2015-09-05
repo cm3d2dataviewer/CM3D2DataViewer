@@ -20,7 +20,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;_ENABLE_MOD</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=x86" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,37 +46,69 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CloneSet.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="Misc\RelationTree.cs" />
+    <Compile Include="Misc\Config.cs" />
+    <Compile Include="ModelIO\DaeExporter.cs" />
     <Compile Include="Data\ModelFile.Write.cs" />
     <Compile Include="Data\ModelFile.Read.cs" />
-    <Compile Include="ExtData\MqoToModel.cs" />
+    <Compile Include="Converter\MqoConverter.cs" />
     <Compile Include="ExtData\MtlFile.cs" />
     <Compile Include="ExtData\ObjFile.cs" />
-    <Compile Include="Globals.cs" />
-    <Compile Include="MenuReplaceControl.cs">
+    <Compile Include="Misc\Globals.cs" />
+    <Compile Include="Converter\DaeConverter.cs" />
+    <Compile Include="ModelIO\ModelGenerator.cs" />
+    <Compile Include="ModelIO\MqoExporter.cs" />
+    <Compile Include="ModelIO\ObjExporter.cs" />
+    <Compile Include="ModelIO\Importer.cs" />
+    <Compile Include="ModelIO\Exporter.cs" />
+    <Compile Include="ModelIO\DaeImporter.cs" />
+    <Compile Include="ModelIO\ObjImporter.cs" />
+    <Compile Include="UI\CM3D2ModelControl.IO.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MenuReplaceControl.Designer.cs">
+    <Compile Include="UI\ItemCloneControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\ItemCloneControl.Designer.cs">
+      <DependentUpon>ItemCloneControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MenuReplaceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\MenuReplaceControl.Designer.cs">
       <DependentUpon>MenuReplaceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewMenuControl.cs">
+    <Compile Include="UI\ModEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="NewMenuControl.Designer.cs">
+    <Compile Include="UI\ModEditorControl.Designer.cs">
+      <DependentUpon>ModEditorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\ModManager.cs" />
+    <Compile Include="UI\ModMateralControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\ModMateralControl.Designer.cs">
+      <DependentUpon>ModMateralControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\ModSrcFile.cs" />
+    <Compile Include="UI\NewMenuControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\NewMenuControl.Designer.cs">
       <DependentUpon>NewMenuControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewMenuDialog.cs">
+    <Compile Include="UI\NewMenuDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewMenuDialog.Designer.cs">
+    <Compile Include="UI\NewMenuDialog.Designer.cs">
       <DependentUpon>NewMenuDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\CM3D2ModelControl.Import.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="UI\TextureCopyDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\CM3D2ModelControl.Export.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="UI\TextureCopyDialog.Designer.cs">
+      <DependentUpon>TextureCopyDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\CM3D2MorphControl.cs">
       <SubType>UserControl</SubType>
@@ -83,7 +116,7 @@
     <Compile Include="UI\CM3D2MorphControl.Designer.cs">
       <DependentUpon>CM3D2MorphControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataManager.cs" />
+    <Compile Include="Data\DataManager.cs" />
     <Compile Include="Data\BaseFile.cs" />
     <Compile Include="UI\DataManagerControl.cs">
       <SubType>UserControl</SubType>
@@ -128,14 +161,26 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data\TexFile.cs" />
-    <EmbeddedResource Include="MenuReplaceControl.resx">
+    <EmbeddedResource Include="UI\ItemCloneControl.resx">
+      <DependentUpon>ItemCloneControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MenuReplaceControl.resx">
       <DependentUpon>MenuReplaceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewMenuControl.resx">
+    <EmbeddedResource Include="UI\ModEditorControl.resx">
+      <DependentUpon>ModEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ModMateralControl.resx">
+      <DependentUpon>ModMateralControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\NewMenuControl.resx">
       <DependentUpon>NewMenuControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewMenuDialog.resx">
+    <EmbeddedResource Include="UI\NewMenuDialog.resx">
       <DependentUpon>NewMenuDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\TextureCopyDialog.resx">
+      <DependentUpon>TextureCopyDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CM3D2MorphControl.resx">
       <DependentUpon>CM3D2MorphControl.cs</DependentUpon>
@@ -180,6 +225,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ColladaLib\ColladaLib.csproj">
+      <Project>{6b859177-3f10-4087-a785-9739a0e29f1d}</Project>
+      <Name>ColladaLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IMLib\IMLib.csproj">
+      <Project>{595afa44-4b4b-4bfa-9fe4-dc1810aba2fd}</Project>
+      <Name>IMLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\Close.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
